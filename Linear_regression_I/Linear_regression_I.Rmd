@@ -1,0 +1,115 @@
+---
+title: "Linear_regression_I"
+output: html_notebook
+---
+
+This is a tutorial on simple linear regression with Stan using the iris dataset. 
+
+### First get the data
+```{r}
+data(iris) 
+head(iris)
+```
+
+We only use the versicolor flowers, and define the covariates as the sepal length and the variates as the petal length. 
+```{r}
+versicolor = which(iris$Species == 'versicolor')
+x = iris$Sepal.Length[versicolor]
+y = iris$Petal.Length[versicolor] 
+```
+
+We prepare the data for Stan in a list format
+```{r}
+data = list(
+	N = length(x),
+	x = x,
+	y = y
+)
+```
+
+### Fit the data
+```{r}
+require(rstan)
+fit = stan(file = 'model.stan',data=data)
+```
+
+```{r}
+print(fit)
+```
+
+Extract the best fit parameters and visualise on the data
+```{r}
+plot(x,y)
+params = extract(fit)
+alpha = mean(params$alpha)
+beta = mean(params$beta)
+abline(a=alpha, b=beta)
+```
+
+### posterior intervals
+The posterior draws can be used to obtain posterior intervals on the fit
+```{r}
+plot(x,y)
+params = extract(fit)
+alpha = mean(params$alpha)
+beta = mean(params$beta)
+abline(a=alpha, b=beta)
+xr=seq(4,7.5,0.1)
+yCI = sapply(xr, function(x) quantile(params$beta*x + params$alpha, probs=c(0.05,0.95) )) #95% quantiles 
+lines(xr, yCI[1,], col='red')
+lines(xr, yCI[2,], col='red')
+```
+
+# Simulated data
+Simulated data from the posterior can be used as a sanity check
+```{r}
+plot(density(y), xlim=c(2,6.5), ylim=c(0,1.4))
+for(i in 1:10){lines(density(params$y_sim[i,]), col='red')}
+```
+
+Using the simulated data, we should recover similar parameters to the real data. To check this we can re-run the model with a simulated dataset.
+```{r}
+y_new = params$y_sim[20, ] #20th simulated dataset
+data_new = list(
+	N = length(x),
+	x = x,
+	y = y_new
+)
+fit_new = stan(file ='model.stan', data=data_new)
+```
+
+
+
+Plot the posteriors on the parameters of the simulated and real data
+```{r}
+par(mfrow=c(1,2))
+params_new=extract(fit_new)
+plot(density(params$alpha))
+lines(density(params_new$alpha),col='red')
+plot(density(params$beta))
+lines(density(params_new$beta),col='red')
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
