@@ -1,0 +1,57 @@
+---
+title: "Split testing I"
+output: html_notebook
+---
+
+### Split testing I
+This notebook accompanies the youtube tutorial "Split testing in Stan: Should I make a Twitter ad or a Facebook ad?" https://youtu.be/Z1IB4FT_Yog
+
+```{r}
+#get packages 
+require(rstan)
+```
+
+```{r}
+#get data
+input = read.csv('data.txt')
+data = list(y1 = input$facebook, y2 = input$twitter, n = length(input$facebook))
+print(data)
+```
+
+```{r}
+#fit stan model
+fit = stan(file='my_model.stan', data=data)
+summary(fit)
+```
+
+```{r}
+#extract the parameters and plot the marginalised posteriors
+params = extract(fit)
+plot(density(params$theta1), main='', xlab='Click-through-rate', ylab='Probability', lwd=2, xlim=c(0,0.9))
+lines(density(params$theta2), lty='dashed', col='gray',lwd=2)
+legend('topright', legend=c('theta1', 'theta2'), lty=c('solid', 'dashed'), col=c('black', 'gray'),lwd=2, bty='n')
+```
+
+```{r}
+# plot the generated quantity, the difference between the rates
+plot(density(params$Delta_theta), main='', xlab=expression(Delta*theta), ylab='Probability',lwd=2)
+```
+
+### now try with more data
+```{r}
+input2 = read.csv('data2.txt')
+data2 = list(y1 = input2$facebook, y2 = input2$twitter, n = length(input2$facebook))
+```
+
+```{r}
+fit2 = stan(file='my_model.stan', data=data2)
+summary(fit)
+```
+
+```{r}
+params=extract(fit)
+plot(density(params$theta1), main='', xlab='Click-through-rate', ylab='Probability', lwd=2, xlim=c(0,0.9), ylim=c(0,8.2))
+lines(density(params$theta2), lty='dashed', col='gray',lwd=2)
+legend('topright', legend=c(paste(5, ' samples', sep=''),'theta1', 'theta2'), lty=c('solid','solid', 'dashed'), col=c('white', 'black', 'gray'),lwd=2, bty='n')
+```
+
