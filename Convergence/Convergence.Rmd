@@ -4,7 +4,8 @@ output: html_notebook
 ---
 
 
-This notebook accompanies the youtube tutorial for Stan.
+This notebook accompanies the youtube tutorial for Stan: https://youtu.be/0FdMZwIbJ_4
+
 ```{r}
 require(rstan)
 ```
