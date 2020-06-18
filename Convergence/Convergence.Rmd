@@ -1,0 +1,224 @@
+---
+title: "Have I converged"
+output: html_notebook
+---
+
+
+This notebook accompanies the youtube tutorial for Stan.
+```{r}
+require(rstan)
+```
+
+### Law of large numbers (LLN)
+The law of large numbers says that the sample mean will approach the expectation value as the sample size approaches large values. For example a coin toss, where heads is 0, and tails is 1, we can see that for a small sample of 10 tosses, we dont necessarily expect the mean tto be 0.5: 
+
+```{r}
+tosses = rbinom(n=10, size=1, prob=0.5)
+mean(tosses)
+```
+
+But with more flips, the sample mean will approach the expectation
+
+```{r}
+tosses = rbinom(5000, 1, 0.5) 
+means = sapply(1:5000, function(x) mean(tosses[1:x]))
+plot(means, ty='l', ylim=c(0,1), xlab='toss', ylab='mean of tosses')
+abline(h=0.5, lty='dashed')
+```
+
+### The central limit theorem (CLT)
+The central limit theorem says that with sufficiently large independent and random samples, the distribution of sample means will be approximately normal distributed, which justifies the common use of a gaussian distribution for the mean of a large collection of data. For example lets look at 10,000 sets of 1,000 samples from a poisson and exponetial distrbutions. You will find that the sample means will be gaussian distributed about the expectation, with a standard deviation equal to the square root of N. 
+
+```{r,fig.width=5, fig.height=2.5}
+par(mfrow=c(1,2))
+
+#get samples
+sample_pois = sapply(1:10000, function(x) rpois(1000, 0.6))
+
+sample_exp = sapply(1:10000, function(x) rexp(1000, 0.6))
+
+#calculate means of samples 
+mean_pois = colMeans(sample_pois)
+mean_exp = colMeans(sample_exp)
+
+#plot distributions
+plot(density(mean_pois), xlab='sample mean', ylab='density', main='Poisson distribution')
+lines(x = seq(0.5,0.8,0.005), dnorm(x = seq(0.5,0.8,0.005), mean=mean(sample_pois), sd=sd(sample_pois)/sqrt(1000)), col='red', lty='dotted') #plot the gaussian approximation
+legend('topright', legend = c('true', 'gaussian'), col=c('black', 'red'), lty=c('solid', 'dotted'), bty='n')
+
+
+plot(density(mean_exp), xlab='sample mean', ylab='', main='Exponential distribution')
+lines(x = seq(1.5,1.9,0.01), dnorm(x = seq(1.5,1.9,0.01), mean=mean(sample_exp), sd=sd(sample_exp)/sqrt(1000)), col='red', lty='dotted') #plot the gaussian approximation
+```
+
+
+As an example let's look at the 8 schools dataset from Section 5.5 of Gelman et al. (2003). Here we have J=8 schools, that are used in a study to see the effectiveness of coaching on the improvement of students in an aptitude test. Each school has an estimated treatment effect y and standard error on the effect estimate sigma.
+
+```{r}
+schools_dat <- list(J = 8, 
+                    y = c(28,  8, -3,  7, -1,  1, 18, 12),
+                    sigma = c(15, 10, 16, 11,  9, 11, 10, 18))
+
+```
+
+The model is a hiearchical model, we're not going to be discussing hierarchical models in this video, so I  wont go into detail but as usual you have a data block with the number of schools, estimated treatment effects and error on those estimates. We're interested in the true treatment effect of each individual school and the population treatment effect across all of the schools. 
+
+```{r}
+schools_code = "
+data {
+    int<lower=0> J; // number of schools
+    vector[J] y; // observed treatment effect
+    vector<lower=0>[J] sigma; // uncertainty on observed effect
+}
+
+parameters {
+    vector[J] theta; // true treatment effect
+    real mu; // population treatment effect
+    real<lower=0> tau; //population scale
+}
+
+model {
+  //(hyper) priors
+    mu ~ normal(0,5);
+    tau ~ cauchy(0,5);
+
+    theta ~ normal(mu,tau);
+  
+  //likelihood
+    y ~ normal(theta, sigma);
+}
+"
+```
+
+
+Lets first fit the model with 4 chains 
+```{r}
+fit = stan(model_code = schools_code, data=schools_dat, chains = 4,iter = 20)
+```
+
+## Scatter plots
+
+Extract the parameters of the fit and plot them
+```{r}
+params=extract(fit, permuted=FALSE, inc_warmup=TRUE)
+```
+
+```{r}
+plot(c(-5,25), c(-5,25), ty='n', xlab='mu', ylab='tau')
+lines(params[,'chain:1','mu'], params[,'chain:1','tau'], col='black',ty='o', pch=20)
+lines(params[,'chain:2','mu'], params[,'chain:2','tau'], col='orange',ty='o', pch=20)
+lines(params[,'chain:3','mu'], params[,'chain:3','tau'], col='red',ty='o', pch=20)
+lines(params[,'chain:4','mu'], params[,'chain:4','tau'], col='gray',ty='o', pch=20)
+legend('topright', legend=c('chain1', 'chain2', 'chain3', 'chain4'), col=c('black', 'orange', 'red', 'gray'), lty='solid', bty='n')
+```
+
+## Trace plots
+
+From the scatter plot and the trace plots, we can see that the chains are not well mixed. Their distributions are very different. 
+
+```{r}
+traceplot(fit, pars=c('mu','tau'))
+```
+
+By increasing the number of iterations, and throwing away the warmup we can improve the mixing.
+
+```{r}
+fit = stan(model_code = schools_code, data=schools_dat, chains = 4,iter = 1000)
+traceplot(fit, pars=c('mu','tau'))
+```
+
+## Rhat 
+Rhat statistic is given in the last column of the print() function. It compares the variances of the pooled chains to the individual chains for each parameter. Ideally Rhat should be less than 1.1 
+```{r}
+print(fit)
+```
+
+## Neff
+Neff is the number of effective samples, it tells you the number of samples taking into account the correlations between samples. Ideally the number of effective samples divided by the number of iterations should be greater than 0.01
+```{r}
+neff = summary(fit)$summary[,'n_eff']
+neff/4000
+```
+
+Sometimes the number of effective samples can be different in the bulk of the posterior compared to in the tails. Its useful to check these values too with the monitor() function. The bulk_ESS and tail_ESS should be greater than 100 per chain. 
+```{r}
+monitor(extract(fit, permuted = FALSE, inc_warmup = FALSE))
+```
+
+Running larger chains and thinning the chains can sometimes help improve the effective sample size.
+```{r}
+fit = stan(model_code = schools_code, data=schools_dat, chains = 4,iter = 10000, warmup = 500)
+```
+
+## Divergences 
+
+Divergences are indicators of regions of high curvature that is not well explored by Stan. These can be seen as red points in the pairs() plot of parameters. 
+```{r}
+pairs(fit, pars=c('mu', 'tau', 'lp__'))
+```
+
+Increasing adapt_delta can sometimes reduce the number of divergences 
+
+```{r}
+
+adapt_delta = c(0.8, 0.85, 0.9, 0.95)
+ndiv = get_num_divergent(fit)
+
+for(i in 2:4){
+  fit = stan(model_code = schools_code, data=schools_dat, chains = 4,iter = 10000, warmup = 500,control=list(adapt_delta=adapt_delta[i]))
+  ndiv = c(ndiv,get_num_divergent(fit))
+}
+```
+
+However if the number of divergences does not decrease with increase of adapt delta, then your model requires reparameterisation. 
+
+
+```{r}
+plot(adapt_delta,ndiv, ty='o', pch=20, xlab='adapt_delta', ylab='number of divergences')
+```
+
+
+```{r}
+schools_code = "
+data {
+    int<lower=0> J; // number of schools
+    vector[J] y; // observed treatment effect
+    vector<lower=0>[J] sigma; // uncertainty on observed effect
+}
+
+parameters {
+    real mu; // population treatment effect
+    real<lower=0> tau; //population scale
+    vector[J] eta;  //unscaled deviation from mu by school
+}
+
+transformed parameters {
+    vector[J] theta; // true treatment effect
+    
+    theta = mu + tau * eta; 
+}
+
+model {
+  //(hyper) priors
+    mu ~ normal(0,5);
+    tau ~ cauchy(0,5);
+    eta ~ normal(0,1);
+    
+  //likelihood
+    y ~ normal(theta, sigma);
+}
+"
+```
+
+```{r}
+fit = stan(model_code = schools_code, data=schools_dat, chains = 4,iter = 10000, warmup = 500, control = list(adapt_delta=0.95))
+```
+```{r}
+print(fit)
+```
+
+
+
+
+
+
