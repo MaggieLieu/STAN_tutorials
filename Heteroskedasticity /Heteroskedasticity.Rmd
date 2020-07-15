@@ -1,0 +1,155 @@
+---
+title: "Modelling Heteroscedasticity"
+output: html_notebook
+---
+
+This notebook accompanies the Stan youtube tutorial on introduction to Heterogeneity and how to modeel heeteroscedasticity (https://youtu.be/nwuU-KEKXhU)
+Let's make a plot to show the difference between homogeneous variance and heterogeneous variance. 
+
+```{r, fig.height=2, fig.width=5}
+par(mfrow=c(1,2))
+n=100
+x = runif(n,0,10)
+a = 0.4; b=1.3
+y = a + b*x + rnorm(n,0,1)
+
+plot(x,y, pch=20, main='homoscedacity')
+abline(a=a, b=b, col='red', lwd=2)
+
+y = a + b * x + rnorm(n, 0, sqrt(x))
+plot(x,y, pch=20, main='heteroscedacity')
+abline(a=a, b=b, col='red', lwd=2)
+
+```
+
+Say we have some heteroscedastic data, 
+```{r, fig.height=2, fig.width=5}
+par(mfrow=c(1,2))
+x = runif(n,0,10)
+y = a + b*x + rnorm(n, 0, 0.3)*x
+plot(x,y, pch=20)
+```
+
+
+We fit the data assuming homoscedasticity. 
+```{r}
+require(rstan)
+data = list(n = length(y),
+            y = y, 
+            X = x)
+
+fit = stan(file='homo_model.stan', data=data)
+```
+
+```{r}
+pairs(fit, pars=c('alpha','beta','sigma'))
+```
+Note that the parameters are not well recovered. Instead we should use a model that properly accounts for the heterescedastic variance.
+
+```{r}
+fit = stan(file = 'heto_model.stan', data=data)
+```
+
+```{r}
+pairs(fit, pars=c('alpha','beta','sigma'))
+```
+With a heteroscedastic model, we recover well the parameters. 
+
+## Financial data
+Now let's assume we are interested in buying stocks on the stock market. Ideally we want to purchase during a time of low volatility and this is one such scenario where modelling of heteroscedasticity is important.
+```{r}
+ts = data.frame(year = time(EuStockMarkets))
+stocks = data.frame(EuStockMarkets)
+stocks
+```
+
+For modelling heteroscedasticity we work with the percentage change of the stock price rather than the stock price itself
+```{r}
+par(mfrow=c(1,2))
+t = ts$year
+y = stocks$FTSE
+pc_dif = diff(y)/y[-length(y)]*100 #calculate percentage change 
+plot(t, y, ty='l', xlab='year', ylab='price')
+plot(t[-1], pc_dif, ty='l', xlab='year', ylab='percentage change')
+```
+
+We fit the data using an ARCH[1] model that uses the previous value to predict the next value.
+```{r}
+data = list(
+  T = length(pc_dif),
+  r = pc_dif
+)
+
+fit = stan(file='arch.stan', data=data)
+```
+
+```{r}
+#extract the parameters
+params = extract(fit)
+mu = mean(params$mu)
+alpha0 = mean(params$alpha0)
+alpha1 = mean(params$alpha1)
+```
+
+```{r}
+# Let's use our best fit model to predict the volatility from the previous day. 
+pred = sapply(2:1860, function(x) mu + sqrt(alpha0 + alpha1*(pc_dif[x-1] - mu)^2) )
+```
+
+```{r}
+plot(t[-1], pc_dif, ty='l', xlab='time', ylab='percentage change')
+lines(t[-1], pred, lty='solid', col='red')
+lines(t[-1], -pred, lty='solid', col='red')
+legend('topright', legend=c('Truth', 'Predicted Volatility'), col=c('black','red'), bty='n', lty='solid') 
+```
+We dont expect the prediction to match the truth because we are fitting the volatility not the percentage change! but we do hope that the volatility is higher when the percentage change is higher and thats what we see.
+
+The arch model was nice but we can do better with a generalised ARCH or GARCH model. The garch model not only takes into account the previous data point, but also the volatility of the previous data point which makes it even more robust. However the downside is that you need provide not only the first point but the volatility at that point 
+
+
+
+```{r}
+data = list(
+    T = length(pc_dif),
+    r = pc_dif,
+    sigma1 = 0.1
+)
+
+fit = stan(file='garch.stan', data=data)
+```
+
+```{r}
+#extract parameters from fit
+params = extract(fit)
+mu = mean(params$mu)
+alpha0 = mean(params$alpha0)
+alpha1 = mean(params$alpha1)
+beta1 = mean(params$beta1)
+sigma = colMeans(params$sigma)
+```
+
+
+```{r}
+# Let's use our best fit model to predict the volatility from the previous day. 
+pred = sapply(2:1860, function(x) mu + sqrt(alpha0 
+              + alpha1 * (pc_dif[x-1] - mu)^2
+              + beta1 * (sigma[x-1])^2) )
+```
+
+
+```{r}
+# get uncertainties
+yCI = sapply(2:1860, function(x) quantile(params$mu + sqrt(params$alpha0 
+              + params$alpha1 * (pc_dif[x-1] - params$mu)^2
+              + params$beta1 * (params$sigma[,x-1])^2) , probs=c(0.05,0.95) ))
+```
+
+```{r}
+plot(t[-1], pc_dif, ty='l', xlab='time', ylab='percentage change', main='FTSE')
+legend('topright', legend=c('Truth', 'Predicted Volatility'), col=c('black','red'), bty='n', lty='solid') 
+polygon(x=c(t[2:1860], rev(t[2:1860]), t[2]), y=c(yCI[1,], rev(yCI[2,]),yCI[1,1]),  col=rgb(1,0,0,0.1), border = NA) #plot envelope of uncertainties
+polygon(x=c(t[2:1860], rev(t[2:1860]), t[2]), y=c(-yCI[1,], rev(-yCI[2,]),-yCI[1,1]),  col=rgb(1,0,0,0.1), border = NA) #plot envelope of uncertainties
+lines(t[-1], pred, lty='solid', col='red', lwd=1)
+lines(t[-1], -pred, lty='solid', col='red', lwd=1)
+```
+Notice how the predictions are much more smooth now. The uncertainties are barely visible even zooming in.
