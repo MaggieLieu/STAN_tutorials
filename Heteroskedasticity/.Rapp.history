@@ -1,0 +1,526 @@
+1113.51/12
+95*12
+data(mtcars)
+mtcars
+plot(mtcars$mpg,mtcars$cyl)
+plot(mtcars$mpg,mtcars$drat)
+plot(mtcars$mpg,mtcars$hp)
+plot(mtcars$mpg,mtcars$hp, log='xy')
+plot(mtcars$mpg,mtcars$hp)
+rbinom(1,2,0.5)
+rbinom(100, 2, 0.5)
+tosses = rbinom(100, 1, 0.5)
+length(which(tosses ==0))
+length(which(tosses ==1))
+length(which(tosses ==0))/length(which(tosses=1))
+length(which(tosses ==0))/length(which(tosses==1))
+tosses = rbinom(100, 1, 0.5)
+length(which(tosses ==0))/length(which(tosses==1))
+N = c(10, 100, 1000, 10000)#
+Ratios = c()#
+For (n in N){#
+	Tosses =  rbinom(n=n, size=1, prob=0.5)#
+	Ratios = c(Ratios,  length(which(tosses ==0))/length(which(tosses==1)))#
+}
+N = c(10, 100, 1000, 10000)#
+Ratios = c()#
+for(n in N){#
+	Tosses =  rbinom(n=n, size=1, prob=0.5)#
+	Ratios = c(Ratios,  length(which(tosses ==0))/length(which(tosses==1)))#
+}
+plot(N, Ratios)
+N
+n
+N = c(10, 100, 1000, 10000)#
+ratios = c()#
+for (n in N){#
+	tosses =  rbinom(n=n, size=1, prob=0.5)#
+	ratios = c(ratios,  length(which(tosses ==0))/length(which(tosses==1)))#
+}
+plot(N, Ratios)
+plot(N, ratios)
+N = c(10, 100, 1000, 10000)#
+ratios = c()#
+for (n in N){#
+	tosses =  rbinom(n=n, size=1, prob=0.5)#
+	ratios = c(ratios,  length(which(tosses ==0))/length(which(tosses==1)))#
+}
+plot(N, ratios)
+abline(h=1)
+N = c(10, 100, 1000, 10000)#
+ratios = c()#
+for (n in N){#
+	tosses =  rbinom(n=n, size=1, prob=0.5)#
+	ratios = c(ratios,  length(which(tosses ==0))/length(which(tosses==1)))#
+}; plot(N, ratios); abline(h=1)
+sapply(1:2, function(x) rbinom(10,1,0.5))
+mean(5)
+tosses = rbinom(1000, 1, 0.5) #
+means = sapply(1:1000, function(x) mean(tosses[1:x]))
+plot(means)
+plot(means, ty='l')
+abline(h=0.5)
+mean(c(0,1))
+plot(means, ty='l', ylim=c(0,1))
+tosses[1:10]
+mean(tosses[1:10])
+abline(h=0.5)
+mean(tosses[1:3])
+tosses = rbinom(10000, 1, 0.5) #
+means = sapply(1:10000, function(x) mean(tosses[1:x]))#
+plot(means, ty=’l’, ylim=c(0,1), xlab=’toss’, ylab=’mean of tosses’)#
+abline(h=0.5, lty=’dashed’)
+tosses = rbinom(10000, 1, 0.5) #
+means = sapply(1:10000, function(x) mean(tosses[1:x]))#
+plot(means, ty='l', ylim=c(0,1), xlab='toss, ylab=’mean of tosses’)#
+abline(h=0.5, lty=’dashed’)
+'
+''
+tosses = rbinom(10000, 1, 0.5) #
+means = sapply(1:10000, function(x) mean(tosses[1:x]))#
+plot(means, ty='l', ylim=c(0,1), xlab='toss', ylab='mean of tosses')#
+abline(h=0.5, lty=’dashed’)
+tosses = rbinom(10000, 1, 0.5) #
+means = sapply(1:10000, function(x) mean(tosses[1:x]))#
+plot(means, ty='l', ylim=c(0,1), xlab='toss', ylab='mean of tosses')#
+abline(h=0.5, lty='dashed')
+tosses = rbinom(5000, 1, 0.5) #
+means = sapply(1:5000, function(x) mean(tosses[1:x]))#
+plot(means, ty='l', ylim=c(0,1), xlab='toss', ylab='mean of tosses')#
+abline(h=0.5, lty='dashed')
+library(help = "datasets")
+HairEyeColor
+EuStockMarkets
+head(EuStockMarkets)
+plot(EuStockMarkets)
+require(graphics)#
+pairs(mtcars, main = "mtcars data", gap = 1/4)
+require(graphics)#
+pairs(mtcars, main = "mtcars data", gap = 1/4)#
+coplot(mpg ~ disp | as.factor(cyl), data = mtcars,#
+       panel = panel.smooth, rows = 1)
+mtcars2 <- within(mtcars, {#
+   vs <- factor(vs, labels = c("V", "S"))#
+   am <- factor(am, labels = c("automatic", "manual"))#
+   cyl  <- ordered(cyl)#
+   gear <- ordered(gear)#
+   carb <- ordered(carb)#
+})#
+summary(mtcars2)
+data(schools)
+schoolls
+schools
+require(rstan)
+a = matrix(data = 1, nrow=3, ncol=3)
+a
+b = matrix(data = 2, nrow=3, ncol=3)
+a
+v
+c(a,b)
+tosses = rbinom(n=10, size=1,prob=0.5)
+mean(tosses)
+tosses = rbinom(n=5000, size=1, prob=0.5)
+means = sapply(1:5000, function(x) mean(tosses[1:x]))
+plot(means, ty='l', ylim = c(0,1), xlab='toss', ylab='mean of tosses')
+abline(h=0.5, lty='dashed')
+require(magaxis)
+require(magixaxis)
+require(magicaxis)
+plot(means, ty='l', ylim = c(0,1), xlab='', ylab='' axes=FALSE)
+plot(means, ty='l', ylim = c(0,1), xlab='', ylab='', axes=FALSE)
+magaxis(1:2)
+magaxis(3:4, labels=FALSE)
+mtext('tosses', side=1, line=2)
+mtext('mean of tosses', side=2, line=2)
+plot(means, ty='l', ylim = c(0,1), xlab='', ylab='', axes=FALSE, lwd=2)
+magaxis(1:2)
+magaxis(3:4, labels=FALSE)
+mtext('tosses', side=1, line=2)
+mtext('mean of tosses', side=2, line=2)
+abline(h=0.5, lty='dashed')
+plot(means, ty='n', ylim = c(0,1), xlab='', ylab='', axes=FALSE, lwd=2)
+magaxis(1:2)
+magaxis(3:4, labels=FALSE)
+mtext('tosses', side=1, line=2)
+mtext('mean of tosses', side=2, line=2)
+abline(h=0.5, lty='dashed')
+sample_pois = sapply(1:10000, function(x) rpois(1000,0.6))
+sample_exp = sapply(1:10000, function(x) rexp(1000,0.6))
+mean_pois = colMeans(sample_pois)
+mean_exp = colMeans(sample_exp)
+plot(density(mean_pois))
+plot(density(mean_exp))
+acf
+schools_dat = list( J = 8, y = c(28,8,-3,7,-1,1,18,12), sigma = c(15,10,16,11,9,11,10,18))
+require(rstan)
+schools_dat = list( J = 8, y = c(28,8,-3,7,-1,1,18,12), sigma = c(15,10,16,11,9,11,10,18))
+require(rstan)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=20)
+schools_dat = list( J = 8, y = c(28,8,-3,7,-1,1,18,12), sigma = c(15,10,16,11,9,11,10,18))
+require(rstan)
+fit = stan('model.stan', data = schools_dat, chains=4, iter=20)
+params = extract(fit, permuted=FALSE, inc_warmup=TRUE)
+plot(c(-5,25), c(-5,25), ty='n', xlab='mu', ylab='tau')
+lines(params[,'chain:1', 'mu'], params[,'chain:1','tau'], col='black', ty='o', pch=20)
+lines(params[,'chain:2', 'mu'], params[,'chain:2','tau'], col='orange', ty='o', pch=20)
+lines(params[,'chain:3', 'mu'], params[,'chain:3','tau'], col='red', ty='o', pch=20)
+lines(params[,'chain:4', 'mu'], params[,'chain:4','tau'], col='gray', ty='o', pch=20)
+traceplot(fit,pars=c('mu','tau'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=1000)
+traceplot(fit, pars=c('mu','tau'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=1000)
+traceplot(fit, pars=c('mu','tau'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=1000)
+traceplot(fit, pars=c('mu','tau'))
+print(fit)
+neff = summary(fit)$summary[,'n_eff']
+neff/2000
+monitor(extract(fit, permuted=FALSE, inc_warmup=FALSE))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+pairs(fit, pars=c('mu', 'tau','lp__'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=1000, warmup=500, control=list(adapt_delta=0.85))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+pairs(fit, pars=c('mu', 'tau','lp__'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+pairs(fit, pars=c('mu', 'tau','lp__'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+print(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=50)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+pairs(fit, pars=c('mu', 'tau','lp__'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.95))
+get_num_divergent(fit)
+print(fit)
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains =4, iter=10000, warmup=500, control=list(adapt_delta=0.95))
+82.24*12
+30000/(82.24*12)
+21414+9500
+(21414+9500-12500)*0.2
+8084-3682
+21414-(21414+9500-12500)*0.2
+(7238+9500-12500)*0.2
+(14333+9500-12500)*0.2
+9449+18507-3682
+9449+18507-847.6-2266.6
+(14333-12500)*0.2
+9449+18507-847.6-366.6
+10000*7*8.5
+28*86\
+28*86
+2000+(9*150)+(9*350)+2000+(4*100)
+60652/157695
+60652/(60652+157695)
+50/(180)
+54/(180)
+12+3+7
+90/22
+2000+(9*150)+9*350+2000+100*4
+x = runif(n,0,10)#
+y = a + b*x + rnorm(n, 0, 0.3)*x#
+plot(x,y, pch=20)
+n=100
+x = runif(n,0,10)#
+y = a + b*x + rnorm(n, 0, 0.3)*x#
+plot(x,y, pch=20)
+a = 0.4; b=1.3
+x = runif(n,0,10)#
+y = a + b*x + rnorm(n, 0, 0.3)*x#
+plot(x,y, pch=20)
+library(animation)#
+saveGIF({#
+  ani.options(nmax = 100)#
+  par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  n=100#
+  a = 0.4; b=1.3#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  plot(x,y, pch=20, ty='n')#
+  ## use a loop to create images one by one#
+  for (i in 1:n) {#
+    points(x[n], y[n])#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 600, ani.height = 600, ani.res=300)
+saveGIF({#
+  ani.options(nmax = 100)#
+  #par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  n=100#
+  a = 0.4; b=1.3#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:n) {#
+    plot(x,y, pch=20, ty='n')#
+    points(x[1:n], y[1:n])#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 600, ani.height = 600, ani.res=300)
+saveGIF({#
+  ani.options(nmax = 100)#
+  #par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  n=100#
+  a = 0.4; b=1.3#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:n) {#
+    plot(x,y, pch=20, ty='n')#
+    points(x[1:i], y[1:i])#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 6, ani.height = 6, ani.res=300)
+saveGIF({#
+  ani.options(nmax = 100)#
+  #par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  n=100#
+  a = 0.4; b=1.3#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:n) {#
+    plot(x,y, pch=20, ty='n')#
+    points(x[1:i], y[1:i])#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 6, ani.height = 6, ani.res=300)
+library(animation)#
+saveGIF({#
+  ani.options(nmax = 100)#
+  #par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  n=100#
+  a = 0.4; b=1.3#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:ani.options('nmax')) {#
+    plot(x,y, pch=20, ty='n')#
+    points(x[1:i], y[1:i])#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 6, ani.height = 6, ani.res=300)
+library(animation)#
+saveGIF({#
+  n=100#
+  a = 0.4; b=1.3#
+  ani.options(nmax = n)#
+  par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:ani.options('nmax')) {#
+    plot(x,y, pch=20, ty='n')#
+    points(x[1:i], y=[1:i], pch=20)#
+    #plot(x[1:i], dnorm(x[1:i],5,1) ,ty='l', lwd=2, xlim=c(1,9),ylim=c(0,0.45), xlab='X', ylab='density', cex.lab=2, cex.axis=2)#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 600, ani.height = 600)
+saveGIF({#
+  n=100#
+  a = 0.4; b=1.3#
+  ani.options(nmax = n)#
+  par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:ani.options('nmax')) {#
+    plot(x,y, pch=20, ty='n')#
+    points(x[1:i], y=[1:i], pch=20)#
+    #plot(x[1:i], dnorm(x[1:i],5,1) ,ty='l', lwd=2, xlim=c(1,9),ylim=c(0,0.45), xlab='X', ylab='density', cex.lab=2, cex.axis=2)#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 600, ani.height = 600)
+saveGIF({#
+  n=100#
+  a = 0.4; b=1.3#
+  ani.options(nmax = n)#
+  par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:ani.options('nmax')) {#
+    plot(x,y, pch=20, ty='n')#
+    #points(x[1:i], y=[1:i], pch=20)#
+    #plot(x[1:i], dnorm(x[1:i],5,1) ,ty='l', lwd=2, xlim=c(1,9),ylim=c(0,0.45), xlab='X', ylab='density', cex.lab=2, cex.axis=2)#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 600, ani.height = 600)
+plot(x,y)
+plot(x,y, ty='n')
+points(x[1:4], y[1:4], pch=20)
+saveGIF({#
+  n=100#
+  a = 0.4; b=1.3#
+  ani.options(nmax = n)#
+  par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:ani.options('nmax')) {#
+    plot(x,y, pch=20, ty='n')#
+    points(x[1:i], y=[1:i], pch=20)#
+    #plot(x[1:i], dnorm(x[1:i],5,1) ,ty='l', lwd=2, xlim=c(1,9),ylim=c(0,0.45), xlab='X', ylab='density', cex.lab=2, cex.axis=2)#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 600, ani.height = 600)
+saveGIF({#
+  n=100#
+  a = 0.4; b=1.3#
+  ani.options(nmax = n)#
+  par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:ani.options('nmax')) {#
+    plot(x,y, pch=20, ty='n');#
+    points(x[1:i], y=[1:i], pch=20)#
+    #plot(x[1:i], dnorm(x[1:i],5,1) ,ty='l', lwd=2, xlim=c(1,9),ylim=c(0,0.45), xlab='X', ylab='density', cex.lab=2, cex.axis=2)#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 600, ani.height = 600)
+saveGIF({#
+  n=100#
+  a = 0.4; b=1.3#
+  ani.options(nmax = n)#
+  par(oma=c())#
+  #x=seq(1,9, length.out = ani.options('nmax'))#
+  x = runif(n,0,10)#
+  y = a + b*x + rnorm(n, 0, 0.3)*x#
+  ## use a loop to create images one by one#
+  for (i in 1:ani.options('nmax')) {#
+    plot(x,y, pch=20, ty='n');#
+    points(x[1:i], y[1:i], pch=20)#
+    #plot(x[1:i], dnorm(x[1:i],5,1) ,ty='l', lwd=2, xlim=c(1,9),ylim=c(0,0.45), xlab='X', ylab='density', cex.lab=2, cex.axis=2)#
+  }#
+#
+}, interval = 0.05, movie.name = '~/Desktop/bm_demo.gif', ani.width = 600, ani.height = 600)
+require(rstan)#
+data = list(n = length(y),#
+            y = y, #
+            X = x)#
+#
+fit = stan(model_code=my_model, data=data)
+require(rstan)#
+data = list(n = length(y),#
+            y = y, #
+            X = x)#
+#
+fit = stan(file='my_model.stan', data=data)
+require(rstan)#
+data = list(n = length(y),#
+            y = y, #
+            X = x)#
+#
+fit = stan(file='my_model.stan', data=data)
+setwd('Desktop/STAN/GITHUB/STAN_tutorials/Heteroskedasticity /')
+require(rstan)#
+data = list(n = length(y),#
+            y = y, #
+            X = x)#
+#
+fit = stan(file='my_model.stan', data=data)
+pairs(fit, pars=c('alpha','beta','sigma'))
+a
+b
+require(rstan)#
+data = list(n = length(y),#
+            y = y, #
+            X = x)#
+#
+fit = stan(file='heto_model.stan', data=data)
+pairs(fit, pars=c('alpha','beta','sigma'))
+ts = data.frame(year = time(EuStockMarkets))#
+stocks = data.frame(EuStockMarkets)#
+stocks
+ts = data.frame(year = time(EuStockMarkets))#
+stocks = data.frame(EuStockMarkets)#
+stocks
+t = ts$year#
+y = stocks$FTSE#
+pc_dif = diff(y)/y[-length(y)]*100 #calculate percentage change #
+plot(t, y, ty='l', xlab='year', ylab='price')#
+plot(t[-1], pc_dif, ty='l', xlab='year', ylab='percentage change')
+plot(t, y, ty='l', xlab='year', ylab='price')
+data = list(#
+  T = length(pc_dif),#
+  r = pc_dif#
+)
+fit = stan(file='arch.stan', data=data)
+print(fit)
+params = extract(fit)#
+mu = mean(params$mu)#
+alpha0 = mean(params$alpha0)#
+alpha1 = mean(params$alpha1)
+pred = sapply(2:1860, function(x) mu + sqrt(alpha0 + alpha1*(pc_dif[x-1] - mu)^2) )
+plot(t[-1], pc_dif, ty='l', xlab='time', ylab='percentage change')
+lines(t[-1], pred, lty='solid', col='red')#
+lines(t[-1], -pred, lty='solid', col='red')
+legend('topright', legend=c('Truth', 'Predicted Volatility'), col=c('black','red'), bty='n', lty='solid')
+3*8
+3*8*5
+3*8*5*4*12
+3370/(8*5*4*12)
+33700/(8*5*4*12)
+1000/30
+mail
+10000/(30*2)
+10000/(30*12)
+data = list(#
+    T = length(pc_dif),#
+    r = pc_dif,#
+    sigma1 = 0.1#
+)#
+#
+fit = stan(file='garch.stan', data=data)
+params = extract(fit)#
+mu = mean(params$mu)#
+alpha0 = mean(params$alpha0)#
+alpha1 = mean(params$alpha1)#
+beta1 = mean(params$beta1)#
+sigma = colMeans(params$sigma)
+pred = sapply(2:1860, function(x) mu + sqrt(alpha0 #
+              + alpha1 * (pc_dif[x-1] - mu)^2#
+              + beta1 * (sigma[x-1])^2) )
+plot(t[-1], pc_dif, ty='l', xlab='time', ylab='percentage change', main='FTSE')
+lines(t[-1], pred, lty='solid', col='red', lwd=1)
+lines(t[-1], -pred, lty='solid', col='red', lwd=1)
+legend('topright', legend=c('Truth', 'Predicted Volatility'), col=c('black','red'), bty='n', lty='solid')
+yCI = sapply(2:1860, function(x) quantile(params$mu + sqrt(params$alpha0 #
+              + params$alpha1 * (pc_dif[x-1] - params$mu)^2#
+              + params$beta1 * (params$sigma[,x-1])^2) , probs=c(0.05,0.95) ))
+polygon(x=c(t[2:1860], rev(t[2:1860]), t[2]), y=c(yCI[1,], rev(yCI[2,]),yCI[1,1]),  col=rgb(1,0,0,0.1), border = NA)
+plot(t[-1], pc_dif, ty='l', xlab='time', ylab='percentage change', main='FTSE')
+lines(t[-1], pred, lty='solid', col='red', lwd=1)
+lines(t[-1], -pred, lty='solid', col='red', lwd=1)
+polygon(x=c(t[2:1860], rev(t[2:1860]), t[2]), y=c(yCI[1,], rev(yCI[2,]),yCI[1,1]),  col=rgb(0,0,1,0.3), border = NA)
+polygon(x=c(t[2:1860], rev(t[2:1860]), t[2]), y=c(-yCI[1,], rev(-yCI[2,]),-yCI[1,1]),  col=rgb(0,0,1,0.3), border = NA)
+legend('topright', legend=c('Truth', 'Predicted Volatility'), col=c('black','red'), bty='n', lty='solid')
