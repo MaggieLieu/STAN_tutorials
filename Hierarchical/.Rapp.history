@@ -1,0 +1,267 @@
+tosses = rbinom(10000, 1, 0.5) #
+means = sapply(1:10000, function(x) mean(tosses[1:x]))#
+plot(means, ty='l', ylim=c(0,1), xlab='toss', ylab='mean of tosses')#
+abline(h=0.5, lty='dashed')
+tosses = rbinom(5000, 1, 0.5) #
+means = sapply(1:5000, function(x) mean(tosses[1:x]))#
+plot(means, ty='l', ylim=c(0,1), xlab='toss', ylab='mean of tosses')#
+abline(h=0.5, lty='dashed')
+library(help = "datasets")
+HairEyeColor
+EuStockMarkets
+head(EuStockMarkets)
+plot(EuStockMarkets)
+require(graphics)#
+pairs(mtcars, main = "mtcars data", gap = 1/4)
+require(graphics)#
+pairs(mtcars, main = "mtcars data", gap = 1/4)#
+coplot(mpg ~ disp | as.factor(cyl), data = mtcars,#
+       panel = panel.smooth, rows = 1)
+mtcars2 <- within(mtcars, {#
+   vs <- factor(vs, labels = c("V", "S"))#
+   am <- factor(am, labels = c("automatic", "manual"))#
+   cyl  <- ordered(cyl)#
+   gear <- ordered(gear)#
+   carb <- ordered(carb)#
+})#
+summary(mtcars2)
+data(schools)
+schoolls
+schools
+require(rstan)
+a = matrix(data = 1, nrow=3, ncol=3)
+a
+b = matrix(data = 2, nrow=3, ncol=3)
+a
+v
+c(a,b)
+tosses = rbinom(n=10, size=1,prob=0.5)
+mean(tosses)
+tosses = rbinom(n=5000, size=1, prob=0.5)
+means = sapply(1:5000, function(x) mean(tosses[1:x]))
+plot(means, ty='l', ylim = c(0,1), xlab='toss', ylab='mean of tosses')
+abline(h=0.5, lty='dashed')
+require(magaxis)
+require(magixaxis)
+require(magicaxis)
+plot(means, ty='l', ylim = c(0,1), xlab='', ylab='' axes=FALSE)
+plot(means, ty='l', ylim = c(0,1), xlab='', ylab='', axes=FALSE)
+magaxis(1:2)
+magaxis(3:4, labels=FALSE)
+mtext('tosses', side=1, line=2)
+mtext('mean of tosses', side=2, line=2)
+plot(means, ty='l', ylim = c(0,1), xlab='', ylab='', axes=FALSE, lwd=2)
+magaxis(1:2)
+magaxis(3:4, labels=FALSE)
+mtext('tosses', side=1, line=2)
+mtext('mean of tosses', side=2, line=2)
+abline(h=0.5, lty='dashed')
+plot(means, ty='n', ylim = c(0,1), xlab='', ylab='', axes=FALSE, lwd=2)
+magaxis(1:2)
+magaxis(3:4, labels=FALSE)
+mtext('tosses', side=1, line=2)
+mtext('mean of tosses', side=2, line=2)
+abline(h=0.5, lty='dashed')
+sample_pois = sapply(1:10000, function(x) rpois(1000,0.6))
+sample_exp = sapply(1:10000, function(x) rexp(1000,0.6))
+mean_pois = colMeans(sample_pois)
+mean_exp = colMeans(sample_exp)
+plot(density(mean_pois))
+plot(density(mean_exp))
+acf
+schools_dat = list( J = 8, y = c(28,8,-3,7,-1,1,18,12), sigma = c(15,10,16,11,9,11,10,18))
+require(rstan)
+schools_dat = list( J = 8, y = c(28,8,-3,7,-1,1,18,12), sigma = c(15,10,16,11,9,11,10,18))
+require(rstan)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=20)
+schools_dat = list( J = 8, y = c(28,8,-3,7,-1,1,18,12), sigma = c(15,10,16,11,9,11,10,18))
+require(rstan)
+fit = stan('model.stan', data = schools_dat, chains=4, iter=20)
+params = extract(fit, permuted=FALSE, inc_warmup=TRUE)
+plot(c(-5,25), c(-5,25), ty='n', xlab='mu', ylab='tau')
+lines(params[,'chain:1', 'mu'], params[,'chain:1','tau'], col='black', ty='o', pch=20)
+lines(params[,'chain:2', 'mu'], params[,'chain:2','tau'], col='orange', ty='o', pch=20)
+lines(params[,'chain:3', 'mu'], params[,'chain:3','tau'], col='red', ty='o', pch=20)
+lines(params[,'chain:4', 'mu'], params[,'chain:4','tau'], col='gray', ty='o', pch=20)
+traceplot(fit,pars=c('mu','tau'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=1000)
+traceplot(fit, pars=c('mu','tau'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=1000)
+traceplot(fit, pars=c('mu','tau'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=1000)
+traceplot(fit, pars=c('mu','tau'))
+print(fit)
+neff = summary(fit)$summary[,'n_eff']
+neff/2000
+monitor(extract(fit, permuted=FALSE, inc_warmup=FALSE))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+pairs(fit, pars=c('mu', 'tau','lp__'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=1000, warmup=500, control=list(adapt_delta=0.85))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+pairs(fit, pars=c('mu', 'tau','lp__'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+pairs(fit, pars=c('mu', 'tau','lp__'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+print(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=50)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500)
+pairs(fit, pars=c('mu', 'tau','lp__'))
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.85))
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains=4, iter=10000, warmup=500, control=list(adapt_delta=0.95))
+get_num_divergent(fit)
+print(fit)
+get_num_divergent(fit)
+fit = stan('model.stan', data=schools_dat, chains =4, iter=10000, warmup=500, control=list(adapt_delta=0.95))
+82.24*12
+30000/(82.24*12)
+21414+9500
+(21414+9500-12500)*0.2
+8084-3682
+21414-(21414+9500-12500)*0.2
+(7238+9500-12500)*0.2
+(14333+9500-12500)*0.2
+9449+18507-3682
+9449+18507-847.6-2266.6
+(14333-12500)*0.2
+9449+18507-847.6-366.6
+10000*7*8.5
+28*86\
+28*86
+2000+(9*150)+(9*350)+2000+(4*100)
+60652/157695
+60652/(60652+157695)
+50/(180)
+54/(180)
+12+3+7
+90/22
+2000+(9*150)+9*350+2000+100*4
+datasets(E)
+datasets()
+data(EUStockMarkets)
+data(EUStockmarkets)
+data()
+data(EuStockMarkets)
+EuStockMarkets
+write.csv('EuStockMarkets.csv', EuStockMarkets)
+time(EuStockMarkets)
+time(EuStockMarkets)$time
+time(EuStockMarkets)$t
+EuStockMarkets$FTSE
+EuStockMarkets['FTSE']
+t=time(EuStockMarkets)
+t
+EuStockMarkets
+EuStockMarkets['Stocks']
+EuStockMarkets['Stock']
+names(EuStockMarkets)
+head(EuStockMarkets)
+EuStockMarkets[,'FTSE']
+head(EuStockMarkets)
+ftse= EuStockMarkets[,'FTSE']
+out = data.frame('t':t, 'FTSE':ftse)
+dim(t)
+t['time']
+head(t)
+t
+ftse
+ts = data.frame(year=time(EuStockMarkets))
+stocks=data.frame(EuStockMarkets)
+ts
+stocks=data.frame(year = time(EuStockMarkets), EuStockMarkets)
+stocks
+write.csv('EuStockMarket', stocks, quote=FALSE, row.names=FALSE)
+write.csv(stocks,'EuStockMarket',quote=FALSE, row.names=FALSE)
+data()
+rgamma(100,0.1,0.1)
+plot(density(rgamma(1000,0.1,0.1)))
+plot(density(rgamma(1000,0.1,0.1)), xlim=x(0,1))
+plot(density(rgamma(1000,0.1,0.1)), xlim=c(0,1))
+plot(density(rgamma(1000,0.1,0.01)), xlim=c(0,1))
+plot(density(rgamma(1000,0.1,0.1)), xlim=c(0,1))
+plot(density(rgamma(1000,0.3,0.3)), xlim=c(0,1))
+186.19-9.15
+(186.19-9.15)/24
+7.37/10000
+5/50000
+7*5
+35/5
+430000-60000
+43000*0.2
+430000*0.2
+86000+37000
+60000+180000
+(60000+180000)/0.8*1
+335*0.2
+335-67-60
+x=seq(-10,10,0.1)
+y=dpois(x, 0.2)
+x=seq(0,10,0.1)
+y=dpois(x, 0.2)
+warnings()
+x=seq(-10,10,1)
+y=dpois(x, 0.2)
+plot(x,y)
+plot(x,y, ty='l')
+x=seq(0,20,1)
+y=dpois(x, 0.2)
+plot(x,y, ty='l')
+y=dpois(x, 0.5)
+lines(x,y)
+y=dpois(x, 4)
+lines(x,y)
+y=dpois(x, 8)
+lines(x,y)
+y=dpois(x, 0.8)
+lines(x,y)
+plot(x,y, ty='l', xlab=x, ylab='density')
+plot(x,y, ty='l', xlab=, ylab='density')
+plot(x,y, ty='l', xlab='x', ylab='density')
+y=dpois(x, 5)
+lines(x,y)
+y=dpois(x, 12)
+lines(x,y)
+y=dpois(x, 0.8)
+plot(x,y, ty='l', xlab='x', ylab='density')
+y=dpois(x, 5)
+lines(x,y)
+hist(y)
+plot(x,y,ty='s')
+plot(x,y,ty='o')
+plot(x,y,ty='h')
+plot(x,y,ty='h', lwd=3)
+y=dpois(x, 0.8)
+plot(x,y,ty='h', lwd=5, xlab='x', ylab='density')
+y=dpois(x, 5)
+points(x,y, ty='h', col='red',lwd=3)
+y=dpois(x, 12)
+points(x,y, ty='h', col='orange',lwd=1)
+points(x,y, ty='h', col='gray',lwd=1)
+points(x,y, ty='h', col='blue',lwd=1)
+y=dpois(x, 0.8)
+plot(x,y,ty='h', lwd=5, xlab='x', ylab='density')
+y=dpois(x, 5)
+points(x,y, ty='h', col='orange',lwd=3)
+y=dpois(x, 12)
+points(x,y, ty='h', col='red',lwd=1)
+2e6*0.04
+setwd('Desktop/STAN/GITHUB/STAN_tutorials/Hierarchical/')
+data = read.csv('/Users/maggielieu/Desktop/STAN/GITHUB/STAN_tutorials/Hierarchical/premiereleague.csv',col.names = c('Home','score1', 'score2', 'Away'), stringsAsFactors = FALSE)
+head(data)

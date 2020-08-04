@@ -1,0 +1,192 @@
+---
+title: "Hierarchical modelling tutorial"
+output: html_notebook
+---
+
+This notebook is a tutorial on Hierarchical modelling using Stan that accompanies the youtube video https://youtu.be/dNZQrcAjgXQ
+
+```{r}
+require(rstan)
+set.seed(1) #set seed 
+```
+
+First we read in the data
+```{r}
+data = read.csv('/Users/maggielieu/Desktop/STAN/GITHUB/STAN_tutorials/Hierarchical/premiereleague.csv',col.names = c('Home','score1', 'score2', 'Away'), stringsAsFactors = FALSE)
+```
+
+```{r}
+data
+```
+
+```{r}
+ng = nrow(data)
+cat('we have G =', ng, 'games \n')
+```
+
+```{r}
+nt = length(unique(data$Home))
+cat('we have T = ', nt, 'teams \n')
+```
+
+# Traditional method 
+
+We will assume that the goals scored come from a poisson distribution
+s1 | theta_g1 ~ Poisson(theta_g1)  #game g score by home team
+s2 | theta_g2 ~ Poisson(theta_g2)  #game g score by away team
+
+Assuming a log-linear random effect model
+log(theta_g1) = home + att_ht + def_at
+log(theta_g2) = att_at + def_ht
+
+where home is a constant for the advantage for the team hosting the game
+att and def are the attack and defence abilities of the teams where the indices at,ht correspond to the t=1-20 teams. 
+
+priors we willl use for the attack and defence abilities are very wide, essentially the teams' performances are independent of each other
+home ~ normal(0,0.0001)
+att[t] ~ normal(0, 2)
+def[t] ~ normal(0, 2)
+
+Now convert team names for each match into numbers
+```{r}
+teams = unique(data$Home)
+ht = unlist(sapply(1:ng, function(g) which(teams == data$Home[g])))
+at = unlist(sapply(1:ng, function(g) which(teams == data$Away[g])))
+```
+
+```{r}
+# we will save the last 5 games to predict
+np=5
+ngob = ng-np #number of games to fit
+my_data = list(
+  nt = nt, 
+  ng = ngob,
+  ht = ht[1:ngob], 
+  at = at[1:ngob], 
+  s1 = data$score1[1:ngob],
+  s2 = data$score2[1:ngob],
+  np = np,
+  htnew = ht[(ngob+1):ng],
+  atnew = at[(ngob+1):ng]
+)
+```
+
+```{r}
+nhfit = stan(file = 'non_hier_model.stan', data = my_data)
+```
+```{r}
+print(nhfit)
+```
+`Plot the predicted scores of the last 5 matches
+```{r, fig.height=5, fig.width=5}
+nhparams = extract(nhfit)
+pred_scores = c(colMeans(nhparams$s1new),colMeans(nhparams$s2new))
+true_scores = c(data$score1[(ngob+1):ng],data$score2[(ngob+1):ng] )
+plot(true_scores, pred_scores, xlim=c(0,5), ylim=c(0,5), pch=20, ylab='predicted scores', xlab='true scores')
+abline(a=0,  b=1, lty='dashed')
+
+pred_errors = c(sapply(1:np, function(x) sd(nhparams$s1new[,x])),sapply(1:np, function(x) sd(nhparams$s1new[,x])))
+arrows(true_scores, pred_scores+pred_errors, true_scores, pred_scores-pred_errors, length = 0.05, angle = 90, code = 3, col=rgb(0,0,0,0.3))
+```
+
+We can also look at the attack/defense of the teams:
+```{r}
+attack = colMeans(nhparams$att)
+defense = colMeans(nhparams$def)
+
+plot(attack,defense,xlim=c(-0.4,1.1))
+abline(h=0)
+abline(v=0)
+text(attack,defense, labels=teams, cex=0.7, pos=4)
+```
+
+
+
+Or we can assume all of the abilities are the same, or at least very similar by setting a very tight prior on the attack and defence abilities N(0,0.001), essentially restricting the teams to have the same performance 
+
+```{r}
+nhpoolfit = stan(file = 'non_hier_model_pool.stan', data = my_data)
+```
+
+Again we can plot the predicted scores of the last 5 matches, note now how the predicted scores are all the same.
+```{r, fig.width=5, fig.height=5}
+nhpoolparams = extract(nhpoolfit)
+pred_scores = c(colMeans(nhpoolparams$s1new),colMeans(nhpoolparams$s2new))
+pred_errors = c(sapply(1:np, function(x) sd(nhpoolparams$s1new[,x])),sapply(1:np, function(x) sd(nhpoolparams$s1new[,x])))
+true_scores = c(data$score1[(ngob+1):ng],data$score2[(ngob+1):ng] )
+plot(true_scores, pred_scores, xlim=c(0,4), ylim=c(0,4), pch=20, ylab='predicted scores', xlab='true scores')
+abline(a=0,  b=1, lty='dashed')
+arrows(true_scores, pred_scores+pred_errors, true_scores, pred_scores-pred_errors, length = 0.05, angle = 90, code = 3)
+```
+
+and similarly the teams' attack and defense abilities are all close to 0.
+```{r}
+attack = colMeans(nhpoolparams$att)
+defense = colMeans(nhpoolparams$def)
+
+plot(attack,defense,xlim=c(-0.4,1.1))
+abline(h=0)
+abline(v=0)
+text(attack,defense, labels=teams, cex=0.7, pos=4)
+```
+
+# Hierarchical model
+In a hierarchical model, the parameters of interest, in our case the attack and defense ability are drawn from the population distribution. 
+att[t] ~ normal(mu_att, tau_att)
+def[t] ~ normal(mu_def, tau_def)
+
+Instead we define priors on the population, known as the hyperpriors.
+mu_att = normal(0,0.0001)
+tau_att = gamma(0.1,0.1)
+mu_def = normal(0, 0.0001)
+tau_def = gamma(0.1,0.1)
+
+```{r}
+hfit = stan(file = 'hier_model.stan', data = my_data)
+```
+
+```{r}
+print(hfit)
+```
+
+```{r}
+pairs(hfit, pars=c('mu_att', 'tau_att', 'mu_def', 'tau_def'))
+```
+
+```{r, fig.height=5, fig.width=5}
+hparams = extract(hfit)
+pred_scores = c(colMeans(hparams$s1new),colMeans(hparams$s2new))
+pred_errors = c(sapply(1:np, function(x) sd(hparams$s1new[,x])),sapply(1:np, function(x) sd(hparams$s1new[,x])))
+true_scores = c(data$score1[(ngob+1):ng],data$score2[(ngob+1):ng] )
+plot(true_scores, pred_scores, xlim=c(0,5), ylim=c(0,5), pch=20, ylab='predicted scores', xlab='true scores')
+abline(a=0,  b=1, lty='dashed')
+arrows(true_scores, pred_scores+pred_errors, true_scores, pred_scores-pred_errors, length = 0.05, angle = 90, code = 3, rgb(0,0,0,0.3))
+```
+
+
+```{r}
+attack = colMeans(hparams$att)
+attacksd = sapply(1:nt, function(x) sd(hparams$att[,x]))
+defense = colMeans(hparams$def)
+defensesd = sapply(1:nt, function(x) sd(hparams$def[,x]))
+
+plot(attack,defense, xlim=c(-0.4,1), ylim=c(-0.45,0.3), pch=20)
+arrows(attack-attacksd, defense, attack+attacksd, defense, code=3, angle = 90, length = 0.04, col=rgb(0,0,0,0.2))
+arrows(attack, defense-defensesd, attack, defense+defensesd, code=3, angle = 90, length = 0.04,col=rgb(0,0,0,0.2))
+#abline(h=0)
+#abline(v=0)
+text(attack,defense, labels=teams, cex=0.7, adj=c(-0.05,-0.8) )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
