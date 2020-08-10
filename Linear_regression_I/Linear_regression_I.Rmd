@@ -11,6 +11,7 @@ data(iris)
 head(iris)
 ```
 
+
 We only use the versicolor flowers, and define the covariates as the sepal length and the variates as the petal length. 
 ```{r}
 versicolor = which(iris$Species == 'versicolor')
@@ -89,7 +90,6 @@ lines(density(params_new$alpha),col='red')
 plot(density(params$beta))
 lines(density(params_new$beta),col='red')
 ```
-
 
 
 
