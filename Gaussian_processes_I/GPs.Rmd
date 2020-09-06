@@ -4,7 +4,7 @@ output: html_notebook
 runtime: shiny
 ---
 
-This notebook is a tutorial on Gaussian Processes using Stan that accompanies the youtube video. 
+This notebook is a tutorial on Gaussian Processes using Stan that accompanies the youtube video https://youtu.be/132s2B-mzBg 
 ```{r}
 require(rstan)
 ```
